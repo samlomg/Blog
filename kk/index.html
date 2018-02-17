@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>dglbc</title>
+    <script type="text/javascript" src="https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/js/lib/jquery-1.10.2_d88366fd.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+        function clca(){
+            //100 3 97
+            //(100-3) * 1 =97 
+            //
+            var money=$("#money").val();
+            var koudian=$("#koudian").val();
+            if (money == null || money.length == 0) {
+                alert("请输入金额");
+                return;
+            }
+            if (koudian == null || koudian.length == 0) {
+                alert("请输入点数");
+                return;
+            }
+            var value=(parseFloat(money) / 100) * (100 - parseFloat(koudian)) ;
+            var shouxufei=parseFloat(money) -value
+            $("#re").val("回款："+value+" , 手续费："+shouxufei);
+            
+
+        }
+
+
+    </script>
+    <style>
+.center {  
+position:fixed;
+    top:10%;
+    left:40%;
+    width:100%;
+    body, main::before {
+    background: url("http://cn.bing.com/az/hprichbg/rb/BandiagaraDogon_ZH-CN12463052433_1920x1080.jpg") 0 / cover fixed;
+}
+}
+    </style>
+</head>
+<body>
+    <div class="center">
+        <h1>琪琪计算器</h1>
+
+        <div class="form-group">
+            <label for="exampleInputFile">金额 : </label>
+            <input type="text" id="money"  placeholder="请输入金额">
+          </div>
+
+
+        <div class="form-group">
+            <label for="exampleInputFile">点数 : </label>
+            <input type="text" id="koudian" placeholder="请输入点数">
+          </div>
+          <button type="submit" class="btn btn-default" onclick="clca()">提交</button><br>
+          <textarea  rows="3" readonly id="re"></textarea>
+ 
+    </div>
+
+
+
+</body>
+</html>
