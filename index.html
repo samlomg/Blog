@@ -6,40 +6,62 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <style type="text/css">
         table{
-            width: 60%;
+            width: 50%;
             margin: 0 auto;   
+        }
+        form {
+            width: 500px;
+            height: 50px;
+            padding: 10px 20px 20px;
+            text-align: center;
+            line-height: 50px;
         }
     </style>
     <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
     <script type="text/javascript">
-        hotkeys('alt+1,alt+2,alt+3', 
+        hotkeys('alt+1,alt+2,alt+3,enter', 
         function(event,handler) {
         switch(handler.key){
-            case "alt+1":document.getElementById("baidu").click();break;
-            case "alt+2":document.getElementById("mydrivers").click();break;
+            case "alt+1":document.getElementById("mydrivers").click();break;
+            case "alt+2":document.getElementById("oschina").click();break;
             case "alt+3":document.getElementById("github").click();break;
+            case "enter":document.getElementById("baidu_submit").click();break;
         }
         });
     </script>
 </head>
 <body>
+
+
 <table align="center" >
     <tbody>
         <tr>
-            <td>
-                <a id="baidu" target = "_blank" href="https://www.baidu.com/">
-                    <h2>
-                        
-                    <img height="32px" width="32px" src="https://www.baidu.com/favicon.ico" alt="百度" />
-                     百度   
-                    </h2>
-                </a>
+            <td colspan="3">
+                <form action="http://www.baidu.com/s" method="GET" target="_blank">
+                    <img src="http://www.baidu.com/img/baidu_jgylogo3.gif" alt="百度Logo" />
+                    <input type="text" name="wd" size="38" />
+                    <input id="baidu_submit" type="submit" value="百度一下" />
+                    <input type="hidden" name="ie" value="utf-8" />
+                    <input type="hidden" name="tn" value="dglbc" />
+                </form>
             </td>
+        </tr>
+        <tr>
+            
             <td>
                 <a id="mydrivers" target = "_blank" href="https://www.mydrivers.com/">
                     <h2>
                     <img height="32px" width="32px" src="https://www.mydrivers.com/favicon.ico" alt="快科技" />
                     快科技   
+                    </h2>
+                </a>
+            </td>
+            <td>
+                <a id="oschina" target = "_blank" href="https://www.oschina.net/">
+                    <h2>
+                        
+                    <img height="32px" width="32px" src="https://static.oschina.net/new-osc/img/favicon.ico" alt="oschina" />
+                    oschina   
                     </h2>
                 </a>
             </td>
