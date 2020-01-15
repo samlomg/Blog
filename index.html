@@ -4,21 +4,49 @@
     <meta charset="UTF-8">
     <title>My Frist Page</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style type="text/css">
+        table{
+            width: 60%;
+            margin: 0 auto;   
+        }
+    </style>
+    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+    <script type="text/javascript">
+        hotkeys('alt+1,alt+2,alt+3', 
+        function(event,handler) {
+        switch(handler.key){
+            case "alt+1":document.getElementById("baidu").click();
+            case "alt+2":document.getElementById("mydrivers").click();
+            case "alt+3":document.getElementById("github").click();
+        }
+        });
+    </script>
 </head>
 <body>
-<table  >
+<table align="center" >
     <tbody>
         <tr>
             <td>
-                <a target = "_blank" href="https://www.baidu.com/">
+                <a id="baidu" target = "_blank" href="https://www.baidu.com/">
                     <h2>
+                        
+                    <img height="32px" width="32px" src="https://www.baidu.com/favicon.ico" alt="百度" />
                      百度   
                     </h2>
                 </a>
             </td>
             <td>
-                <a target = "_blank" href="https://github.com">
+                <a id="mydrivers" target = "_blank" href="https://www.mydrivers.com/">
                     <h2>
+                    <img height="32px" width="32px" src="https://www.mydrivers.com/favicon.ico" alt="快科技" />
+                    快科技   
+                    </h2>
+                </a>
+            </td>
+            <td>
+                <a id="github" target = "_blank" href="https://github.com">
+                    <h2>
+                    <img height="32px" width="32px" src="https://github.githubassets.com/favicon.ico" alt="github" />
                      github   
                     </h2>
                 </a>
