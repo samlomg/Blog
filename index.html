@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>My Frist Page</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <style type="text/css">
-        table{
-            width: 50%;
-            margin: 0 auto;   
+        table {
+            width: 60%;
+            margin: 0 auto;
+            table-layout: fixed;
+        }
+        table.td{
+
         }
         form {
             width: 500px;
@@ -17,26 +21,15 @@
             line-height: 50px;
         }
     </style>
-    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
-    <script type="text/javascript">
-        hotkeys('alt+1,alt+2,alt+3,enter', 
-        function(event,handler) {
-        switch(handler.key){
-            case "alt+1":document.getElementById("mydrivers").click();break;
-            case "alt+2":document.getElementById("oschina").click();break;
-            case "alt+3":document.getElementById("github").click();break;
-            case "enter":document.getElementById("baidu_submit").click();break;
-        }
-        });
-    </script>
+
 </head>
 <body>
 
 
-<table align="center" >
-    <tbody>
+<table align="center" id="t">
+    <tbody id="fb">
         <tr>
-            <td colspan="3">
+            <td colspan="5">
                 <form action="http://www.baidu.com/s" method="GET" target="_blank">
                     <img src="http://www.baidu.com/img/baidu_jgylogo3.gif" alt="百度Logo" />
                     <input type="text" name="wd" size="38" autofocus="autofocus" />
@@ -46,36 +39,129 @@
                 </form>
             </td>
         </tr>
-        <tr>
-            
-            <td>
-                <a id="mydrivers" target = "_blank" href="https://www.mydrivers.com/">
-                    <h2>
-                    <img height="32px" width="32px" src="https://www.mydrivers.com/favicon.ico" alt="快科技" />
-                    快科技   
-                    </h2>
-                </a>
-            </td>
-            <td>
-                <a id="oschina" target = "_blank" href="https://www.oschina.net/">
-                    <h2>
-                        
-                    <img height="32px" width="32px" src="https://static.oschina.net/new-osc/img/favicon.ico" alt="oschina" />
-                    oschina   
-                    </h2>
-                </a>
-            </td>
-            <td>
-                <a id="github" target = "_blank" href="https://github.com">
-                    <h2>
-                    <img height="32px" width="32px" src="https://github.githubassets.com/favicon.ico" alt="github" />
-                     github   
-                    </h2>
-                </a>
-            </td>
-        </tr>
-        
     </tbody>
 </table>
+
+<!--加载合适的js -->
+<!-- jquerry -->
+<script src="https://dss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/js/lib/jquery-1-cc52697ab1.10.2.js"></script>
+
+<!-- 开发环境版本，包含了有帮助的命令行警告
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+-->
+
+<!-- 生产环境版本，优化了尺寸和速度-->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!--<script src="js/vue.js"></script>-->
+
+<!-- 加载hotkeys -->
+
+<script src="js/hotkeys.min.js"></script>
+
 </body>
+<script type="text/javascript">
+    var json_str = {
+        mydrivers: {
+            "name": "快科技",
+            "url": "https://www.mydrivers.com",
+            "favicon": "https://www.mydrivers.com/favicon.ico"
+        },
+        oschina: {
+            "name": "开源中国",
+            "url": "https://www.oschina.net/",
+            "favicon": "https://static.oschina.net/new-osc/img/favicon.ico"
+        }
+        ,
+        github: {
+            "name": "github",
+            "url": "https://github.com",
+            "favicon": "https://github.githubassets.com/favicon.ico"
+        }
+        ,
+        bilibili: {
+            "name": "bilibili",
+            "url": "https://www.bilibili.com/",
+            "favicon": "https://www.bilibili.com/favicon.ico"
+        }
+        ,
+        acfun: {
+            "name": "acfun",
+            "url": "https://www.acfun.cn/",
+            "favicon": "https://cdn.aixifan.com/ico/favicon.ico"
+        }
+        ,
+        博客园: {
+            "name": "cnblogs",
+            "url": "https://www.cnblogs.com/",
+            "favicon": "https://common.cnblogs.com/favicon.ico"
+        }
+        ,
+        w3school: {
+            "name": "w3school",
+            "url": "https://www.w3school.com.cn/",
+            "favicon": "https://www.w3school.com.cn/ui2019/logo-16-red.png"
+        }
+    };
+
+
+
+    //先把整体的html代码生成，然后在用vue渲染
+    // 循环所有键
+
+    var html = "";
+    var trhtml = "";
+    var tdhtml = "";
+    var con = 1;
+
+    for(var key in json_str) {
+        //如果对象类型为object类型且数组长度大于0 或者 是对象 ，继续递归解析
+        var element = json_str[key];
+        // console.log("----eles -->  " + key + ":" + element.name + " ");
+        if( con % 7 == 0){
+            html += " <tr> ";
+            html += trhtml;
+            html += " </tr> ";
+            con = 1;
+            trhtml = "";
+        }
+        tdhtml = ' <a id="' + key + '" target = "_blank" v-bind:href="' + key + '.url" >';
+        tdhtml += ' <h2> ';
+
+        tdhtml += ' <img height="32px" width="32px" v-bind:src="' + key + '.favicon" /> ';
+        tdhtml +=  element.name;
+        tdhtml += ' </h2> ';
+        tdhtml += ' </a> ';
+        trhtml += ' <td> ' + tdhtml + ' </td> ';
+        con++;
+        // if(element.length > 0 && typeof(element) == "object" || typeof(element) == "object") {
+        //     parseJson(element);
+        // } else { //不是对象或数组、直接输出
+        //     console.log("----eles -->  " + key + ":" + element + " ");
+        // }
+
+    }
+
+    html += " <tr> ";
+    html += trhtml;
+    html += " </tr> ";
+    $("#fb").append(html);
+
+    //加载图片
+    var vm = new Vue({
+        el: '#t',
+        data: json_str
+
+    });
+    //绑定键位
+    hotkeys('alt+1,alt+2,alt+3,enter',
+        function(event,handler) {
+            switch(handler.key){
+                case "alt+1":document.getElementById("mydrivers").click();break;
+                case "alt+2":document.getElementById("oschina").click();break;
+                case "alt+3":document.getElementById("github").click();break;
+                case "enter":document.getElementById("baidu_submit").click();break;
+            }
+        });
+
+</script>
 </html>
