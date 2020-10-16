@@ -51,7 +51,9 @@
 
 </head>
 <body >
+<div id="userAgent_C">
 
+</div>
 <div class="search_box_shell">
 
     <div class="search_box">
@@ -217,6 +219,6 @@
                 case "enter":document.getElementById("baidu_submit").click();break;
             }
         });
-
+	$("#userAgent_C").html("当前浏览器:"+navigator.userAgent.toLowerCase());
 </script>
 </html>
