@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+<!--    <link rel="stylesheet" href="css/index.css">-->
+    <!-- 引入组件库 -->
+    <!-- import Vue before Element -->
+<!--    <script src="js/vue.js"></script>-->
+    <!-- import JavaScript -->
+<!--    <script src="js/index.js"></script>-->
+    <!--    <script src="js/axios.min.js"></script>-->
+<!--    <script src="js/axios.min.js"></script>-->
+    <!-- 加载hotkeys -->
+    <script src="js/hotkeys.min.js"></script>
+    <script src="https://unpkg.com/vue@2.7.14"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+<div id="app">
+    <el-container :style="{'height':screenHeight}">
+        <el-aside width="auto" style="background-color: white">
+            <el-menu :default-active="activeIndex"
+                     class="el-menu-vertical-demo"
+                     @open="handleOpen" @close="handleClose"
+                     :collapse="isCollapse">
+                <el-menu-item :index="menu.url" @click="loadMainData(menu.url)" v-for="menu in menus"
+                              :key="menu.id">
+                    <i :class="menu.class"></i>
+                    <span slot="title">{{menu.name}}</span>
+                </el-menu-item>
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            <el-header>
+                <el-row :gutter="20">
+                    <el-col :span="1">
+                        <el-button  :icon="headericon" @click="headericons"></el-button>
+                    </el-col>
+                    <el-col :span="13">
+                        <el-input placeholder="浏览器Agent" :disabled="true" v-model="userAgent_C" clearable></el-input>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-form :inline="true"
+                                 :model="baiduForm"
+                                 class="demo-form-inline"
+                                 @submit.native.prevent>
+                            <el-form-item>
+                                <el-input style="width: 300px" placeholder="百度一下" v-model="baiduForm.wd" clearable></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" id="baidu_submit" @click="onSubmitSearch">查询</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
+            </el-header>
+            <el-main>
+                <div style="margin-right: -10px; margin-left: -10px;text-align: center;">
+                    <el-row :gutter="20" style="display:flex; flex-wrap: wrap; ">
+                        <el-col :span="4" v-for="site in sites" :key="site.idCode"
+                                style="flex-direction: column;  margin-bottom: 20px;align-items: center; justify-content: center;">
+                            <a :id="site.idCode" target="_blank" :href="site.url">
+                                <el-card :body-style="{ padding: '0px' }" shadow="always">
+                                    <img :src="site.favicon" style="width: 50px ;height: 50px;margin-top: 10px">
+                                    <div style="padding: 14px;">
+                                        <span>{{site.name}}</span>
+                                    </div>
+                                </el-card>
+                            </a>
+                        </el-col>
+                    </el-row>
+                </div>
+
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+<script>
+    var vue_c = new Vue({
+        el: '#app',
+        data() {
+            return {
+                isCollapse: true,
+                userAgent_C: navigator.userAgent.toLowerCase(),
+                sites: [],
+                baiduForm: {
+                    wd: '',
+                    ie: 'utf-8',
+                    tn: 'dglbc'
+                },
+                menus: [
+                    {
+                        id: 1,
+                        name: "测试",
+                        url: "/json/local.json",
+                        class: "el-icon-location"
+                    },
+                    {
+                        id: 2,
+                        name: "14网段",
+                        url: "/json/14.json",
+                        class: "el-icon-menu"
+                    },
+                    {
+                        id: 3,
+                        name: "22网段",
+                        url: "/json/22.json",
+                        class: "el-icon-document"
+                    },
+                    {
+                        id: 4,
+                        name: "日常使用",
+                        url: "/json/daily.json",
+                        class: "el-icon-setting"
+                    }
+                ],
+                screenHeight: document.documentElement.clientHeight + 'px',
+                headericon: 'el-icon-s-fold',
+                activeIndex: '1',
+            };
+        },
+        mounted() {
+            window.loadMainData = this.loadMainData;
+            window.setActiveIndex = this.setActiveIndex;
+        },
+        methods: {
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            headericons() {
+                this.isCollapse == false ? (this.isCollapse = true) : (this.isCollapse = false);
+                this.headericon == 'el-icon-s-fold'
+                    ? (this.headericon = 'el-icon-s-unfold')
+                    : (this.headericon = 'el-icon-s-fold');
+            },
+            loadMainData(url) {
+                axios({
+                    url: url,
+                    method: "get",
+                    headers: {
+                        'Content-Type': 'application/json;charset:utf-8'
+                    }
+                })
+                    .then((res) => {
+                        // console.log(JSON.stringify(res.data));
+                        this.sites = res.data;
+                        // console.log(res.data[0].idCode)
+                        //解绑所有的快捷键
+                        hotkeys.unbind();
+                        inMenus= this.menus
+                        //绑定快捷方式
+                        hotkeys('alt+1,alt+2,alt+3,enter,alt+w,alt+q',
+                            function (event, handler) {
+                                switch (handler.key) {
+                                    case "alt+1":
+                                        document.getElementById(res.data[0].idCode).click();
+                                        break;
+                                    case "alt+2":
+                                        document.getElementById(res.data[1].idCode).click();
+                                        break;
+                                    case "alt+3":
+                                        document.getElementById(res.data[2].idCode).click();
+                                        break;
+                                    case "alt+w":
+                                        loadMainData(inMenus[1].url);
+                                        setActiveIndex(inMenus[1].id);
+                                        break;
+                                    case "alt+q":
+                                        loadMainData(inMenus[3].url);
+                                        setActiveIndex(inMenus[3].id);
+                                        break;
+                                    case "enter":
+                                        document.getElementById("baidu_submit").click();
+                                        break;
+                                }
+                            });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+            , onSubmitSearch() {
+                window.open("https://www.baidu.com/s?wd=" + this.baiduForm.wd + "&ie=" + this.baiduForm.ie + "&tn=" + this.baiduForm.tn);
+            }
+            ,setActiveIndex(index) {
+                this.activeIndex = index;
+            }
+        }
+    });
+    loadMainData("/json/daily.json");
+</script>
+<style type="text/css">
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+        width: 200px;
+        min-height: 400px;
+    }
+</style>
+</body>
+
+</html>
