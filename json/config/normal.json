@@ -1,0 +1,8 @@
+[
+  {
+    "id": 1,
+    "name": "日常使用",
+    "url": "/json/ud/daily.json",
+    "class": "el-icon-setting"
+  }
+]
