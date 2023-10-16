@@ -16,7 +16,7 @@
     <!--    <script src="js/axios.min.js"></script>-->
 <!--    <script src="js/axios.min.js"></script>-->
     <!-- 加载hotkeys -->
-    <script src="js/hotkeys.min.js"></script>
+    <script src="/js/hotkeys.min.js"></script>
     <script src="https://unpkg.com/vue@2.7.14"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
@@ -47,10 +47,16 @@
                     <el-col :span="1">
                         <el-button  :icon="headericon" @click="headericons"></el-button>
                     </el-col>
+                    <el-col :span="1">
+                        <el-switch
+                                @change="initPage()"
+                                v-model="isconcentration">
+                        </el-switch>
+                    </el-col>
                     <el-col :span="13">
                         <el-input placeholder="浏览器Agent" :disabled="true" v-model="userAgent_C" clearable></el-input>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="9">
                         <el-form :inline="true"
                                  :model="baiduForm"
                                  class="demo-form-inline"
@@ -100,37 +106,15 @@
                     tn: 'dglbc'
                 },
                 menus: [
-                    {
-                        id: 1,
-                        name: "测试",
-                        url: "file:///D:/workspace/VSCode/Blog/json/local.json",
-                        class: "el-icon-location"
-                    },
-                    {
-                        id: 2,
-                        name: "14网段",
-                        url: "file:///D:/workspace/VSCode/Blog/json/14.json",
-                        class: "el-icon-menu"
-                    },
-                    {
-                        id: 3,
-                        name: "22网段",
-                        url: "file:///D:/workspace/VSCode/Blog/json/22.json",
-                        class: "el-icon-document"
-                    },
-                    {
-                        id: 4,
-                        name: "日常使用",
-                        url: "file:///D:/workspace/VSCode/Blog/json/daily.json",
-                        class: "el-icon-setting"
-                    }
                 ],
                 screenHeight: document.documentElement.clientHeight + 'px',
                 headericon: 'el-icon-s-fold',
                 activeIndex: '1',
+                isconcentration: false,
             };
         },
         mounted() {
+            window.loadMenus = this.loadMenus;
             window.loadMainData = this.loadMainData;
             window.setActiveIndex = this.setActiveIndex;
         },
@@ -147,7 +131,10 @@
                     ? (this.headericon = 'el-icon-s-unfold')
                     : (this.headericon = 'el-icon-s-fold');
             },
-            loadMainData(url) {
+            loadMenus(url) {
+                if (url == null || url == "") {
+                    url = "/config/normal.json";
+                }
                 axios({
                     url: url,
                     method: "get",
@@ -156,38 +143,152 @@
                     }
                 })
                     .then((res) => {
-                        // console.log(JSON.stringify(res.data));
-                        this.sites = res.data;
-                        // console.log(res.data[0].idCode)
+                        console.log(JSON.stringify(res.data));
+                        this.menus = res.data;
+
+                        axios({
+                            url: res.data[0].url,
+                            method: "get",
+                            headers: {
+                                'Content-Type': 'application/json;charset:utf-8'
+                            }
+                        })
+                            .then((res2) => {
+                                console.log(JSON.stringify(res2.data));
+                                this.sites = res2.data;
+                                //解绑所有的快捷键
+                                hotkeys.unbind();
+                                inMenus= this.menus
+                                if (res2.data.length == 0) {
+                                    return;
+                                }else if (res2.data.length == 1) {
+                                    hotkeys('alt+1,alt+w',
+                                        function (event, handler) {
+                                            switch (handler.key) {
+                                                case "alt+1":
+                                                    document.getElementById(res2.data[0].idCode).click();
+                                                    break;
+                                                case "alt+w":
+                                                    loadMainData(inMenus[0].url);
+                                                    setActiveIndex(inMenus[0].id);
+                                                    break;
+                                            }
+                                        });
+                                }else if (res2.data.length == 2) {
+                                    //绑定快捷方式
+                                    hotkeys('alt+1,alt+2,alt+w',
+                                        function (event, handler) {
+                                            switch (handler.key) {
+                                                case "alt+1":
+                                                    document.getElementById(res2.data[0].idCode).click();
+                                                    break;
+                                                case "alt+2":
+                                                    document.getElementById(res2.data[1].idCode).click();
+                                                    break;
+                                                case "alt+w":
+                                                    loadMainData(inMenus[0].url);
+                                                    setActiveIndex(inMenus[0].id);
+                                                    break;
+                                            }
+                                        });
+                                }else if (res2.data.length > 2) {
+                                    //绑定快捷方式
+                                    hotkeys('alt+1,alt+2,alt+3,alt+w',
+                                        function (event, handler) {
+                                            switch (handler.key) {
+                                                case "alt+1":
+                                                    document.getElementById(res2.data[0].idCode).click();
+                                                    break;
+                                                case "alt+2":
+                                                    document.getElementById(res2.data[1].idCode).click();
+                                                    break;
+                                                case "alt+3":
+                                                    document.getElementById(res2.data[2].idCode).click();
+                                                    break;
+                                                case "alt+w":
+                                                    loadMainData(inMenus[0].url);
+                                                    setActiveIndex(inMenus[0].id);
+                                                    break;
+                                            }
+                                        });
+                                }
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            },
+            loadMainData(url) {
+                axios({
+                    url: url,
+                    method: "get",
+                    headers: {
+                        'Content-Type': 'application/json;charset:utf-8'
+                    }
+                })
+                    .then((res2) => {
+                        console.log(JSON.stringify(res2.data));
+                        this.sites = res2.data;
                         //解绑所有的快捷键
                         hotkeys.unbind();
                         inMenus= this.menus
-                        //绑定快捷方式
-                        hotkeys('alt+1,alt+2,alt+3,enter,alt+w,alt+q',
-                            function (event, handler) {
-                                switch (handler.key) {
-                                    case "alt+1":
-                                        document.getElementById(res.data[0].idCode).click();
-                                        break;
-                                    case "alt+2":
-                                        document.getElementById(res.data[1].idCode).click();
-                                        break;
-                                    case "alt+3":
-                                        document.getElementById(res.data[2].idCode).click();
-                                        break;
-                                    case "alt+w":
-                                        loadMainData(inMenus[1].url);
-                                        setActiveIndex(inMenus[1].id);
-                                        break;
-                                    case "alt+q":
-                                        loadMainData(inMenus[3].url);
-                                        setActiveIndex(inMenus[3].id);
-                                        break;
-                                    case "enter":
-                                        document.getElementById("baidu_submit").click();
-                                        break;
-                                }
-                            });
+                        if (res2.data.length == 0) {
+                            return;
+                        }else if (res2.data.length == 1) {
+                            hotkeys('alt+1,alt+w',
+                                function (event, handler) {
+                                    switch (handler.key) {
+                                        case "alt+1":
+                                            document.getElementById(res2.data[0].idCode).click();
+                                            break;
+                                        case "alt+w":
+                                            loadMainData(inMenus[0].url);
+                                            setActiveIndex(inMenus[0].id);
+                                            break;
+                                    }
+                                });
+                        }else if (res2.data.length == 2) {
+                            //绑定快捷方式
+                            hotkeys('alt+1,alt+2,alt+w',
+                                function (event, handler) {
+                                    switch (handler.key) {
+                                        case "alt+1":
+                                            document.getElementById(res2.data[0].idCode).click();
+                                            break;
+                                        case "alt+2":
+                                            document.getElementById(res2.data[1].idCode).click();
+                                            break;
+                                        case "alt+w":
+                                            loadMainData(inMenus[0].url);
+                                            setActiveIndex(inMenus[0].id);
+                                            break;
+                                    }
+                                });
+                        }else if (res2.data.length > 2) {
+                            //绑定快捷方式
+                            hotkeys('alt+1,alt+2,alt+3,alt+w',
+                                function (event, handler) {
+                                    switch (handler.key) {
+                                        case "alt+1":
+                                            document.getElementById(res2.data[0].idCode).click();
+                                            break;
+                                        case "alt+2":
+                                            document.getElementById(res2.data[1].idCode).click();
+                                            break;
+                                        case "alt+3":
+                                            document.getElementById(res2.data[2].idCode).click();
+                                            break;
+                                        case "alt+w":
+                                            loadMainData(inMenus[0].url);
+                                            setActiveIndex(inMenus[0].id);
+                                            break;
+                                    }
+                                });
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
@@ -199,9 +300,19 @@
             ,setActiveIndex(index) {
                 this.activeIndex = index;
             }
+            ,initPage() {
+                if (this.isconcentration == true) {
+                    alert("公司模式，只能使用公司内部资源");
+                    //只有在公司才能使用
+                    this.loadMenus("http://127.0.0.1:2280/concentration.json");
+                } else {
+                    this.loadMenus("/json/config/normal.json");
+                }
+
+            }
         }
     });
-    loadMainData("/json/daily.json");
+    vue_c.initPage();
 </script>
 <style type="text/css">
     .el-menu-vertical-demo:not(.el-menu--collapse) {

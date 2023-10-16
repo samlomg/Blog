@@ -1,0 +1,38 @@
+[
+  {
+    "idCode": "mydrivers",
+    "name": "快科技",
+    "url": "https://www.mydrivers.com",
+    "favicon": "https://www.mydrivers.com/favicon.ico"
+  },
+  {
+    "idCode": "oschina",
+    "name": "开源中国",
+    "url": "https://www.oschina.net/",
+    "favicon": "https://static.oschina.net/new-osc/img/favicon.ico"
+  },
+  {
+    "idCode": "github",
+    "name": "github",
+    "url": "https://github.com",
+    "favicon": "https://github.githubassets.com/favicon.ico"
+  },
+  {
+    "idCode": "bilibili",
+    "name": "bilibili",
+    "url": "https://www.bilibili.com/",
+    "favicon": "https://www.bilibili.com/favicon.ico"
+  },
+  {
+    "idCode": "w3school",
+    "name": "w3school",
+    "url": "https://www.w3school.com.cn/",
+    "favicon": "https://www.w3school.com.cn/ui2019/logo-16-red.png"
+  },
+  {
+    "idCode": "cnblogs",
+    "name": "cnblogs",
+    "url": "https://www.cnblogs.com/",
+    "favicon": "https://common.cnblogs.com/favicon.ico"
+  }
+]
