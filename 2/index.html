@@ -18,7 +18,7 @@
 <body>
     <div id="app">
         <div>
-            <input type="file" accept="image/*;capture=camera" capture="camera" />
+            <input type="file" id="barCode" accept="image/*;capture=camera" capture="camera" />
         </div>
         <div>
             <span style="font-size: 20px;" id="show_code">等待结果</span>
@@ -31,13 +31,11 @@
                 function (result) {
                     console.dir(result);
                     if (!result.length) {
-                        $("#livestream_scanner").modal("hide");
-                        $("show_code").html(`<p>条形码读取失败</p>`);
+                        $("#show_code").html(`<p>条形码读取失败</p>`);
                         return
                     }
                     var barcode = result[0];
                     if (barcode.Value) {
-                        $("#livestream_scanner").modal("hide");
                         $("#show_code").html(`<p>条形码的信息为:${barcode.Value}</p>`);
                     }
                 });
