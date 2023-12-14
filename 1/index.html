@@ -7,22 +7,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>首页</title>
-<!--    <link rel="stylesheet" href="css/index.css">-->
+   <!-- <link rel="stylesheet" href="../css/index.css"> -->
     <!-- 引入组件库 -->
     <!-- import Vue before Element -->
-<!--    <script src="js/vue.js"></script>-->
+   <!-- <script src="../js/vue.js"></script> -->
     <!-- import JavaScript -->
-<!--    <script src="js/index.js"></script>-->
-    <!--    <script src="js/axios.min.js"></script>-->
-<!--    <script src="js/axios.min.js"></script>-->
+   <!-- <script src="../js/index.js"></script> -->
+    <!-- <script src="../js/axios.min.js"></script>  -->
     <!-- 加载hotkeys -->
-    <script src="/js/hotkeys.min.js"></script>
-    <script src="https://unpkg.com/vue@2.7.14"></script>
+    <script src="../js/hotkeys.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.14/vue.min.js"></script>
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.14/theme-chalk/index.min.css" rel="stylesheet">
     <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.14/index.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.5.0/axios.js"></script>
 </head>
 
 <body>
@@ -117,6 +116,7 @@
             window.loadMenus = this.loadMenus;
             window.loadMainData = this.loadMainData;
             window.setActiveIndex = this.setActiveIndex;
+            window.onSubmitSearch = this.onSubmitSearch;
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -133,7 +133,7 @@
             },
             loadMenus(url) {
                 if (url == null || url == "") {
-                    url = "/config/normal.json";
+                    url = "../config/normal.json";
                 }
                 axios({
                     url: url,
@@ -162,7 +162,7 @@
                                 if (res2.data.length == 0) {
                                     return;
                                 }else if (res2.data.length == 1) {
-                                    hotkeys('alt+1,alt+w',
+                                    hotkeys('alt+1,alt+w,enter',
                                         function (event, handler) {
                                             switch (handler.key) {
                                                 case "alt+1":
@@ -172,11 +172,14 @@
                                                     loadMainData(inMenus[0].url);
                                                     setActiveIndex(inMenus[0].id);
                                                     break;
+                                                case "enter": 
+                                                    this.onSubmitSearch();
+                                                    break;
                                             }
                                         });
                                 }else if (res2.data.length == 2) {
                                     //绑定快捷方式
-                                    hotkeys('alt+1,alt+2,alt+w',
+                                    hotkeys('alt+1,alt+2,alt+w,enter',
                                         function (event, handler) {
                                             switch (handler.key) {
                                                 case "alt+1":
@@ -189,11 +192,14 @@
                                                     loadMainData(inMenus[0].url);
                                                     setActiveIndex(inMenus[0].id);
                                                     break;
+                                                case "enter": 
+                                                    this.onSubmitSearch();
+                                                    break;
                                             }
                                         });
                                 }else if (res2.data.length > 2) {
                                     //绑定快捷方式
-                                    hotkeys('alt+1,alt+2,alt+3,alt+w',
+                                    hotkeys('alt+1,alt+2,alt+3,alt+w,enter',
                                         function (event, handler) {
                                             switch (handler.key) {
                                                 case "alt+1":
@@ -208,6 +214,9 @@
                                                 case "alt+w":
                                                     loadMainData(inMenus[0].url);
                                                     setActiveIndex(inMenus[0].id);
+                                                    break;
+                                                case "enter": 
+                                                    this.onSubmitSearch();
                                                     break;
                                             }
                                         });
@@ -306,7 +315,7 @@
                     //只有在公司才能使用
                     this.loadMenus("http://127.0.0.1:2280/concentration.json");
                 } else {
-                    this.loadMenus("/json/config/normal.json");
+                    this.loadMenus("../json/config/normal.json");
                 }
 
             }
