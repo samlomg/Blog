@@ -18,9 +18,9 @@
     <script src="../js/hotkeys.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.7.14/vue.min.js"></script>
     <!-- 引入样式 -->
-    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.14/theme-chalk/index.css" rel="stylesheet">
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css" type="text/css" rel="stylesheet" />
     <!-- 引入组件库 -->
-    <link href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css" type="text/css" rel="stylesheet" />
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js" type="application/javascript"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.5.0/axios.js"></script>
 </head>
 
@@ -315,7 +315,7 @@
                     //只有在公司才能使用
                     this.loadMenus("http://127.0.0.1:2280/concentration.json");
                 } else {
-                    this.loadMenus("../json/config/normal.json");
+                    this.loadMenus("/json/config/normal.json");
                 }
 
             }
